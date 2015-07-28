@@ -3,6 +3,11 @@ Form Notifications Add-on for Google Forms
 
 A sample Google Apps Script add-on for Google Forms.
 
+This version is a fork of <i>Form Notifications</i> 
+(https://github.com/googlesamples/apps-script-form-notifications-addon).
+It added the possibility to add the form content to the respondent 
+notification email so that the end-user has a copy of what he filled out.
+
 Introduction
 ------------
 

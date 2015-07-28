@@ -6,28 +6,23 @@
   bottom: 54px;
   top: 0;
 }
-
 .branding-text {
   left: 7px;
   position: relative;
   top: 3px;
 }
-
 .logo {
   vertical-align: middle;
 }
-
 .width-100 {
   width: 100%;
   box-sizing: border-box;
   -webkit-box-sizing : border-box;‌
   -moz-box-sizing : border-box;
 }
-
 label {
   font-weight: bold;
 }
-
 #creator-options,
 #respondent-options {
   background-color: #eee;
@@ -36,18 +31,15 @@ label {
   border-style: solid;
   display: none;
 }
-
 #creator-email,
 #respondent-email,
 #button-bar,
 #submit-subject {
   margin-bottom: 10px;
 }
-
 #response-step {
   display: inline;
 }
-
 </style>
 
 <div class="sidebar branding-below">
@@ -82,6 +74,8 @@ label {
       <label for="submit-notice">Notification email body:</label>
       <textarea rows="8" cols="40" id="submit-notice"
           class="width-100"></textarea>
+      <input type="checkbox" id="send-contents-to-respondent">
+      <label for="send-contents-to-respondent">Send contents to respondent</label>
     </div>
 
     <div class="block" id="button-bar">
@@ -107,6 +101,7 @@ label {
     $('#save-settings').click(saveSettingsToServer);
     $('#creator-notify').click(toggleCreatorNotify);
     $('#respondent-notify').click(toggleRespondentNotify);
+//    $('#send-contents-to-respondent').click(toggleSendContentsToRespondent);
     $('#response-step').change(validateNumber);
     google.script.run
        .withSuccessHandler(loadSettings)
@@ -114,7 +109,6 @@ label {
        .withUserObject($('#button-bar').get())
        .getSettings();
   });
-
   /**
    * Callback function that populates the notification options using
    * previously saved values.
@@ -131,15 +125,16 @@ label {
     $('#submit-notice').val(!settings.responseText ?
        'Thank you for responding to our form!' :
        settings.responseText);
-
     if (settings.creatorNotify === 'true') {
       $('#creator-notify').prop('checked', true);
       $('#creator-options').show();
     }
-
     if (settings.respondentNotify === 'true') {
       $('#respondent-notify').prop('checked', true);
       $('#respondent-options').show();
+    }
+    if (settings.sendContentsToRespondent === 'true') {
+      $('#send-contents-to-respondent').prop('checked', true);
     }
 
     // Fill the respondent email select box with the
@@ -154,6 +149,13 @@ label {
     $('#respondent-email').val(settings.respondentEmailItemId);
   }
 
+  /*
+  function toggleSendContentsToRespondent() {
+    if ($('#send-contents-to-respondent').is(':checked')) {
+    }
+  }
+  */
+  
   /**
    * Toggles the visibility of the form creator notification options.
    */
@@ -165,7 +167,6 @@ label {
       $('#creator-options').hide();
     }
   }
-
   /**
    * Toggles the visibility of the form sumbitter notification options.
    */
@@ -177,7 +178,6 @@ label {
       $('#respondent-options').hide();
     }
   }
-
   /**
    * Ensures that the entered step is a number between 1
    * and 99999, inclusive.
@@ -192,7 +192,6 @@ label {
       $('#response-step').val(99999);
     }
   }
-
   /**
    * Collects the options specified in the add-on sidebar and sends them to
    * be saved as Properties on the server.
@@ -202,16 +201,16 @@ label {
     $('#status').remove();
     var creatorNotify = $('#creator-notify').is(':checked');
     var respondentNotify = $('#respondent-notify').is(':checked');
+    var sendContentsToRespondent = $('#send-contents-to-respondent').is(':checked');
     var settings = {
       'creatorNotify': creatorNotify,
-      'respondentNotify': respondentNotify
+      'respondentNotify': respondentNotify,
+      'sendContentsToRespondent': sendContentsToRespondent
     };
-
     // Only save creator options if notify is turned on
     if (creatorNotify) {
       settings.responseStep = $('#response-step').val();
       settings.creatorEmail = $('#creator-email').val().trim();
-
       // Abort save if entered email is blank
       if (!settings.creatorEmail) {
         showStatus('Enter an owner email', $('#button-bar'));
@@ -219,14 +218,13 @@ label {
         return;
       }
     }
-
     // Only save respondent options if notify is turned on
     if (respondentNotify) {
       settings.respondentEmailItemId = $('#respondent-email').val();
       settings.responseSubject = $('#submit-subject').val();
       settings.responseText = $('#submit-notice').val();
+      settings.sendContentsToRespondent = $('#send-contents-to-respondent').is(':checked');
     }
-
     // Save the settings on the server
     google.script.run
         .withSuccessHandler(
@@ -242,7 +240,6 @@ label {
         .withUserObject(this)
         .saveSettings(settings);
   }
-
   /**
    * Inserts a div that contains an status message after a given element.
    *

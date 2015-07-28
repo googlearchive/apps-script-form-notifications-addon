@@ -128,7 +128,8 @@ function adjustFormSubmitTrigger() {
   var settings = PropertiesService.getDocumentProperties();
   var triggerNeeded =
       settings.getProperty('creatorNotify') == 'true' ||
-      settings.getProperty('respondentNotify') == 'true';
+      settings.getProperty('respondentNotify') == 'true' ||
+      settings.getProperty('sendContentsToRespondent') == 'true'  ;
 
   // Create a new trigger if required; delete existing trigger
   //   if it is not needed.
@@ -273,19 +274,33 @@ function sendRespondentNotification(response) {
   var settings = PropertiesService.getDocumentProperties();
   var emailId = settings.getProperty('respondentEmailItemId');
   var emailItem = form.getItemById(parseInt(emailId));
+  var contentString = "";
+  if(settings.getProperty('sendContentsToRespondent')  == 'true') {
+    contentString += "Your response was: \n";
+    var itemResponses = response.getItemResponses();
+    for (var j = 0; j < itemResponses.length; j++) {
+       var itemResponse = itemResponses[j];
+       // Logger.log('Response #%s to the question "%s" was "%s"', (i + 1).toString(), itemResponse.getItem().getTitle(), itemResponse.getResponse());
+      contentString +=  "    " + String(itemResponse.getItem().getTitle()) + ": " + String(itemResponse.getResponse()) + "\n";
+    };
+    contentString += "\n";
+  } else {   
+    contentString += "Your response is not included.\n";
+  }
   var respondentEmail = response.getResponseForItem(emailItem)
       .getResponse();
   if (respondentEmail) {
     var template =
         HtmlService.createTemplateFromFile('RespondentNotification');
     template.paragraphs = settings.getProperty('responseText').split('\n');
+    template.responseData = contentString.split('\n');
     template.notice = NOTICE;
     var message = template.evaluate();
     MailApp.sendEmail(respondentEmail,
         settings.getProperty('responseSubject'),
-        message.getContent(), {
+        (message.getContent()), {
           name: form.getTitle(),
-            htmlBody: message.getContent()
+            htmlBody: (message.getContent())
         });
   }
 }
