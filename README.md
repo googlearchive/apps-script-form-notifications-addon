@@ -1,10 +1,12 @@
-Form Notifications Add-on for Google Forms
-==========================================
+# This repo has been moved to [apps-script-samples](https://github.com/gsuitedevs/apps-script-samples/tree/master/forms/notifications).
+
+---
+
+## Form Notifications Add-on for Google Forms
 
 A sample Google Apps Script add-on for Google Forms.
 
-Introduction
-------------
+## Introduction
 
 Google Apps Script allows developers to construct 'add-ons' -- small
 applications which extend and support Google Docs, Google Sheets,
@@ -27,8 +29,7 @@ This sample makes use of the following Apps Script concepts:
 
 
 
-Getting Started
----------------
+## Getting Started
 
 You can install the [Form Notifications](https://chrome.google.com/webstore/detail/form-notifications/bbpdeojefjfhaelgljjcadpcckdfcdod) add-on from the add-on
 store.
@@ -38,8 +39,7 @@ directions provided in the [Add-on for Google Forms Quickstart](https://develope
 
 
 
-Learn more
-----------
+## Learn more
 
 To continue learning about how to extend Google Docs, Sheets and Forms
 with Apps Script, take a look at the following resources:
@@ -49,8 +49,7 @@ with Apps Script, take a look at the following resources:
 
 
 
-Support
--------
+## Support
 
 - Stack Overflow Tag: [google-apps-script](http://stackoverflow.com/questions/tagged/google-apps-script)
 - Issue Tracker: [google-apps-script-issues](https://code.google.com/p/google-apps-script-issues/issues/list)
@@ -61,8 +60,7 @@ https://github.com/googlesamples/apps-script-form-notifications-addon/issues
 Patches are encouraged, and may be submitted by forking this project and
 submitting a pull request through GitHub.
 
-License
--------
+## License
 
 Copyright 2014 Google, Inc.
 
